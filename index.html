@@ -1,0 +1,930 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SKR MART - Online Store</title>
+
+<style>
+*{
+  box-sizing:border-box;
+  margin:0;
+  padding:0;
+  font-family:Arial,sans-serif;
+}
+
+body{
+  background:#f5f6f8;
+  color:#222;
+}
+
+header{
+  background:#111827;
+  color:white;
+  padding:15px;
+  position:sticky;
+  top:0;
+  z-index:10;
+}
+
+.header-box{
+  max-width:1100px;
+  margin:auto;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:10px;
+}
+
+.logo{
+  font-size:24px;
+  font-weight:bold;
+}
+
+.logo span{
+  color:#f59e0b;
+}
+
+button{
+  border:0;
+  padding:10px 15px;
+  border-radius:7px;
+  cursor:pointer;
+  font-weight:bold;
+}
+
+.admin-btn{
+  background:#f59e0b;
+  color:#111;
+}
+
+.hero{
+  max-width:1100px;
+  margin:20px auto;
+  padding:35px 20px;
+  border-radius:15px;
+  background:linear-gradient(135deg,#111827,#374151);
+  color:white;
+  text-align:center;
+}
+
+.hero h1{
+  font-size:34px;
+  margin-bottom:10px;
+}
+
+.hero p{
+  margin-bottom:20px;
+  color:#e5e7eb;
+}
+
+.search{
+  max-width:500px;
+  margin:20px auto;
+  display:flex;
+  gap:8px;
+}
+
+.search input{
+  width:100%;
+  padding:13px;
+  border:1px solid #ddd;
+  border-radius:8px;
+}
+
+.container{
+  max-width:1100px;
+  margin:auto;
+  padding:10px 15px 40px;
+}
+
+.section-title{
+  margin:20px 0 15px;
+}
+
+.products{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(170px,1fr));
+  gap:15px;
+}
+
+.product{
+  background:white;
+  border-radius:12px;
+  padding:12px;
+  box-shadow:0 2px 10px #00000012;
+}
+
+.product-img{
+  height:150px;
+  background:#eee;
+  border-radius:8px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:50px;
+  margin-bottom:10px;
+}
+
+.product h3{
+  margin-bottom:7px;
+}
+
+.price{
+  color:#15803d;
+  font-size:20px;
+  font-weight:bold;
+  margin:8px 0;
+}
+
+.buy{
+  width:100%;
+  background:#16a34a;
+  color:white;
+}
+
+.admin{
+  display:none;
+  position:fixed;
+  inset:0;
+  background:#f5f6f8;
+  z-index:50;
+  overflow:auto;
+}
+
+.admin-header{
+  background:#111827;
+  color:white;
+  padding:15px;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+}
+
+.admin-content{
+  max-width:1100px;
+  margin:auto;
+  padding:20px;
+}
+
+.close{
+  background:#dc2626;
+  color:white;
+}
+
+.cards{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(150px,1fr));
+  gap:12px;
+  margin-bottom:20px;
+}
+
+.card{
+  background:white;
+  padding:18px;
+  border-radius:10px;
+  box-shadow:0 2px 8px #00000012;
+}
+
+.card b{
+  display:block;
+  font-size:25px;
+  margin-top:8px;
+}
+
+.admin-section{
+  background:white;
+  padding:18px;
+  margin:15px 0;
+  border-radius:10px;
+}
+
+.admin-section h2{
+  margin-bottom:15px;
+}
+
+.form input,
+.form select{
+  width:100%;
+  padding:11px;
+  margin:6px 0;
+  border:1px solid #ddd;
+  border-radius:6px;
+}
+
+.add-btn{
+  background:#2563eb;
+  color:white;
+  margin-top:5px;
+}
+
+.admin-table{
+  width:100%;
+  border-collapse:collapse;
+  margin-top:10px;
+}
+
+.admin-table th,
+.admin-table td{
+  padding:10px;
+  border-bottom:1px solid #eee;
+  text-align:left;
+}
+
+.delete{
+  background:#dc2626;
+  color:white;
+}
+
+.bill-btn{
+  background:#7c3aed;
+  color:white;
+}
+
+footer{
+  background:#111827;
+  color:white;
+  text-align:center;
+  padding:25px;
+  margin-top:30px;
+}
+
+@media(max-width:600px){
+  .hero h1{
+    font-size:27px;
+  }
+
+  .admin-table{
+    font-size:13px;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<header>
+  <div class="header-box">
+    <div class="logo"><span>SKR</span> MART</div>
+    <button class="admin-btn" onclick="openAdmin()">Admin Panel</button>
+  </div>
+</header>
+
+<section class="hero">
+  <h1>Welcome to SKR MART</h1>
+  <p>आपकी जरूरत का सामान, आसान ऑनलाइन ऑर्डर के साथ</p>
+
+  <div class="search">
+    <input id="searchBox" type="text"
+    placeholder="Product खोजें..."
+    oninput="searchProducts()">
+  </div>
+</section>
+
+<div class="container">
+
+  <h2 class="section-title">Our Products</h2>
+
+  <div class="products" id="productList"></div>
+
+</div>
+
+<footer>
+  <h3>SKR MART</h3>
+  <p>Online Shopping • Easy Ordering • Fast Delivery</p>
+  <p>© 2026 SKR MART</p>
+</footer>
+
+
+<!-- ADMIN PANEL -->
+
+<div class="admin" id="adminPanel">
+
+  <div class="admin-header">
+    <h2>SKR MART - Admin Panel</h2>
+    <button class="close" onclick="closeAdmin()">Close</button>
+  </div>
+
+  <div class="admin-content">
+
+    <!-- DASHBOARD -->
+
+    <div class="cards">
+
+      <div class="card">
+        Total Products
+        <b id="totalProducts">0</b>
+      </div>
+
+      <div class="card">
+        Total Orders
+        <b id="totalOrders">0</b>
+      </div>
+
+      <div class="card">
+        Pending Orders
+        <b id="pendingOrders">0</b>
+      </div>
+
+      <div class="card">
+        Sales
+        <b id="totalSales">₹0</b>
+      </div>
+
+    </div>
+
+
+    <!-- PRODUCTS -->
+
+    <div class="admin-section">
+
+      <h2>📦 Products</h2>
+
+      <div class="form">
+
+        <input id="productName"
+        placeholder="Product Name">
+
+        <input id="productPrice"
+        type="number"
+        placeholder="Price">
+
+        <input id="productImage"
+        placeholder="Image URL (optional)">
+
+        <button class="add-btn"
+        onclick="addProduct()">
+        + Add Product
+        </button>
+
+      </div>
+
+      <table class="admin-table">
+        <thead>
+          <tr>
+            <th>Product</th>
+            <th>Price</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+
+        <tbody id="adminProducts"></tbody>
+
+      </table>
+
+    </div>
+
+
+    <!-- ORDERS -->
+
+    <div class="admin-section">
+
+      <h2>🛒 Orders</h2>
+
+      <table class="admin-table">
+
+        <thead>
+          <tr>
+            <th>Order ID</th>
+            <th>Customer</th>
+            <th>Amount</th>
+            <th>Status</th>
+            <th>Billing</th>
+          </tr>
+        </thead>
+
+        <tbody id="ordersList"></tbody>
+
+      </table>
+
+    </div>
+
+
+    <!-- BILLING -->
+
+    <div class="admin-section">
+
+      <h2>🧾 Billing & Label</h2>
+
+      <p>
+      Billing और Package Label इसी Admin Panel के अंदर रहेगा।
+      </p>
+
+      <br>
+
+      <button class="bill-btn"
+      onclick="printSampleBill()">
+      Print Sample Bill / Label
+      </button>
+
+    </div>
+
+
+    <!-- DELIVERY -->
+
+    <div class="admin-section">
+
+      <h2>🚚 Delivery Management</h2>
+
+      <p>Delivery Panel में आगे हम जोड़ेंगे:</p>
+
+      <ul style="margin:10px 0 0 20px;line-height:1.8">
+        <li>Customer Address</li>
+        <li>Current Location</li>
+        <li>Delivery Person</li>
+        <li>Order Status</li>
+        <li>Delivered / Not Delivered</li>
+      </ul>
+
+    </div>
+
+
+    <!-- SETTINGS -->
+
+    <div class="admin-section">
+
+      <h2>⚙️ Settings</h2>
+
+      <p>आगे यहाँ से आप बदल सकेंगे:</p>
+
+      <ul style="margin:10px 0 0 20px;line-height:1.8">
+        <li>SKR MART Logo</li>
+        <li>WhatsApp Number</li>
+        <li>UPI ID</li>
+        <li>GST Details</li>
+        <li>Business Address</li>
+      </ul>
+
+    </div>
+
+  </div>
+</div>
+
+
+<script>
+
+let products = JSON.parse(
+  localStorage.getItem("skr_products")
+) || [
+
+  {
+    id:1,
+    name:"Kitchen Chopper",
+    price:199,
+    image:""
+  },
+
+  {
+    id:2,
+    name:"Storage Bag",
+    price:149,
+    image:""
+  },
+
+  {
+    id:3,
+    name:"Paper Dona",
+    price:99,
+    image:""
+  }
+
+];
+
+
+let orders = JSON.parse(
+  localStorage.getItem("skr_orders")
+) || [];
+
+
+function saveData(){
+
+  localStorage.setItem(
+    "skr_products",
+    JSON.stringify(products)
+  );
+
+  localStorage.setItem(
+    "skr_orders",
+    JSON.stringify(orders)
+  );
+
+}
+
+
+function showProducts(list=products){
+
+  const box=document.getElementById("productList");
+
+  box.innerHTML="";
+
+  list.forEach(p=>{
+
+    box.innerHTML += `
+
+      <div class="product">
+
+        <div class="product-img">
+          ${p.image
+            ? `<img src="${p.image}"
+               style="width:100%;height:100%;object-fit:contain">`
+            : "🛍️"}
+        </div>
+
+        <h3>${p.name}</h3>
+
+        <div class="price">
+          ₹${p.price}
+        </div>
+
+        <button class="buy"
+        onclick="placeOrder(${p.id})">
+        Order Now
+        </button>
+
+      </div>
+
+    `;
+
+  });
+
+}
+
+
+function searchProducts(){
+
+  const text=document
+    .getElementById("searchBox")
+    .value
+    .toLowerCase();
+
+  const result=products.filter(p=>
+    p.name.toLowerCase().includes(text)
+  );
+
+  showProducts(result);
+
+}
+
+
+function placeOrder(id){
+
+  const product=products.find(p=>p.id===id);
+
+  if(!product) return;
+
+  const name=prompt("Customer Name:");
+
+  if(!name) return;
+
+  const mobile=prompt("Mobile Number:");
+
+  if(!mobile) return;
+
+  const address=prompt("Delivery Address:");
+
+  if(!address) return;
+
+  const order={
+
+    id:"SKR"+Date.now(),
+
+    customer:name,
+
+    mobile:mobile,
+
+    address:address,
+
+    product:product.name,
+
+    amount:product.price,
+
+    status:"Pending",
+
+    date:new Date().toLocaleString()
+
+  };
+
+  orders.push(order);
+
+  saveData();
+
+  alert(
+    "Order Successfully Created!\n\n"+
+    "Order ID: "+order.id
+  );
+
+}
+
+
+function openAdmin(){
+
+  document.getElementById(
+    "adminPanel"
+  ).style.display="block";
+
+  updateAdmin();
+
+}
+
+
+function closeAdmin(){
+
+  document.getElementById(
+    "adminPanel"
+  ).style.display="none";
+
+}
+
+
+function addProduct(){
+
+  const name=document
+    .getElementById("productName")
+    .value.trim();
+
+  const price=Number(
+    document.getElementById("productPrice")
+    .value
+  );
+
+  const image=document
+    .getElementById("productImage")
+    .value.trim();
+
+  if(!name || !price){
+
+    alert("Product Name और Price भरें");
+
+    return;
+
+  }
+
+  products.push({
+
+    id:Date.now(),
+
+    name:name,
+
+    price:price,
+
+    image:image
+
+  });
+
+  saveData();
+
+  document.getElementById(
+    "productName"
+  ).value="";
+
+  document.getElementById(
+    "productPrice"
+  ).value="";
+
+  document.getElementById(
+    "productImage"
+  ).value="";
+
+  updateAdmin();
+
+  showProducts();
+
+}
+
+
+function deleteProduct(id){
+
+  if(!confirm("Product delete करें?")) return;
+
+  products=products.filter(
+    p=>p.id!==id
+  );
+
+  saveData();
+
+  updateAdmin();
+
+  showProducts();
+
+}
+
+
+function updateAdmin(){
+
+  document.getElementById(
+    "totalProducts"
+  ).innerText=products.length;
+
+  document.getElementById(
+    "totalOrders"
+  ).innerText=orders.length;
+
+  document.getElementById(
+    "pendingOrders"
+  ).innerText=
+  orders.filter(
+    o=>o.status==="Pending"
+  ).length;
+
+  const sales=orders.reduce(
+    (sum,o)=>sum+Number(o.amount),
+    0
+  );
+
+  document.getElementById(
+    "totalSales"
+  ).innerText="₹"+sales;
+
+
+  const productTable=
+    document.getElementById(
+      "adminProducts"
+    );
+
+  productTable.innerHTML="";
+
+  products.forEach(p=>{
+
+    productTable.innerHTML += `
+
+      <tr>
+
+        <td>${p.name}</td>
+
+        <td>₹${p.price}</td>
+
+        <td>
+          <button class="delete"
+          onclick="deleteProduct(${p.id})">
+          Delete
+          </button>
+        </td>
+
+      </tr>
+
+    `;
+
+  });
+
+
+  const orderTable=
+    document.getElementById(
+      "ordersList"
+    );
+
+  orderTable.innerHTML="";
+
+  orders.forEach(o=>{
+
+    orderTable.innerHTML += `
+
+      <tr>
+
+        <td>${o.id}</td>
+
+        <td>${o.customer}</td>
+
+        <td>₹${o.amount}</td>
+
+        <td>${o.status}</td>
+
+        <td>
+          <button class="bill-btn"
+          onclick="printBill('${o.id}')">
+          Print
+          </button>
+        </td>
+
+      </tr>
+
+    `;
+
+  });
+
+}
+
+
+function printBill(orderId){
+
+  const order=orders.find(
+    o=>o.id===orderId
+  );
+
+  if(!order) return;
+
+  const bill=`
+
+    <html>
+
+    <head>
+
+      <title>SKR MART Bill</title>
+
+      <style>
+
+        body{
+          font-family:Arial;
+          width:300px;
+          margin:auto;
+        }
+
+        h2{text-align:center;}
+
+        hr{
+          border:0;
+          border-top:1px dashed #000;
+        }
+
+        p{
+          margin:7px 0;
+        }
+
+      </style>
+
+    </head>
+
+    <body>
+
+      <h2>SKR MART</h2>
+
+      <p>Order ID: ${order.id}</p>
+
+      <hr>
+
+      <p>Customer: ${order.customer}</p>
+
+      <p>Mobile: ${order.mobile}</p>
+
+      <p>Address: ${order.address}</p>
+
+      <hr>
+
+      <p>Product: ${order.product}</p>
+
+      <p>Amount: ₹${order.amount}</p>
+
+      <p>Status: ${order.status}</p>
+
+      <hr>
+
+      <h3>Total: ₹${order.amount}</h3>
+
+      <p>Thank You for Shopping!</p>
+
+    </body>
+
+    </html>
+
+  `;
+
+  const win=window.open(
+    "",
+    "_blank"
+  );
+
+  win.document.write(bill);
+
+  win.document.close();
+
+  win.print();
+
+}
+
+
+function printSampleBill(){
+
+  const sample={
+
+    id:"SKR-DEMO-001",
+
+    customer:"Demo Customer",
+
+    mobile:"9999999999",
+
+    address:"Customer Address",
+
+    product:"Demo Product",
+
+    amount:199,
+
+    status:"Pending"
+
+  };
+
+  const old=orders;
+
+  orders.push(sample);
+
+  printBill(sample.id);
+
+  orders=old;
+
+}
+
+
+showProducts();
+
+</script>
+
+</body>
+</html>
