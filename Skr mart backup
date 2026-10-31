@@ -1,1 +1,1999 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>SKR MART - Online Shopping</title>
+<link rel="icon" href="logo.png">
 
+<style>
+*{box-sizing:border-box}
+body{margin:0;font-family:Arial,sans-serif;background:#f5f7f8;color:#222}
+button,input,select,textarea{font:inherit}
+button{cursor:pointer;border:0}
+
+header{
+background:white;
+position:sticky;
+top:0;
+z-index:50;
+box-shadow:0 2px 10px #0002
+}
+.head{
+max-width:1200px;
+margin:auto;
+padding:10px 14px;
+display:flex;
+align-items:center;
+gap:12px
+}
+.logo{
+width:145px;
+height:55px;
+object-fit:contain
+}
+.search{
+display:flex;
+flex:1;
+max-width:550px
+}
+.search input{
+width:100%;
+padding:11px;
+border:1px solid #ddd;
+border-radius:8px 0 0 8px
+}
+.search button{
+background:#087a3d;
+color:white;
+padding:0 16px;
+border-radius:0 8px 8px 0
+}
+.share{
+background:#087a3d;
+color:white;
+padding:10px 13px;
+border-radius:8px
+}
+.cart{
+background:white;
+font-size:22px
+}
+.badge{
+background:red;
+color:white;
+border-radius:20px;
+padding:2px 7px;
+font-size:11px
+}
+
+.nav{
+background:#087a3d;
+color:white
+}
+.navin{
+max-width:1200px;
+margin:auto;
+display:flex;
+gap:22px;
+padding:9px 14px;
+overflow:auto
+}
+.nav a{
+color:white;
+text-decoration:none;
+white-space:nowrap
+}
+
+.container{
+max-width:1200px;
+margin:auto;
+padding:16px
+}
+
+.hero{
+background:linear-gradient(120deg,#fff5c9,#fff);
+border-radius:15px;
+padding:30px;
+display:flex;
+align-items:center;
+justify-content:space-between;
+min-height:220px
+}
+.hero h1{
+font-size:42px;
+margin:0
+}
+.hero h1 span{color:#087a3d}
+.hero button,.primary{
+background:#087a3d;
+color:white;
+padding:12px 18px;
+border-radius:8px
+}
+
+.title{
+display:flex;
+justify-content:space-between;
+align-items:center;
+margin:25px 0 12px
+}
+
+.categories{
+display:grid;
+grid-template-columns:repeat(6,1fr);
+gap:10px
+}
+.category{
+background:white;
+padding:17px 8px;
+text-align:center;
+border-radius:12px;
+border:1px solid #eee
+}
+.category b{
+display:block;
+margin-top:7px;
+font-size:13px
+}
+
+.products{
+display:grid;
+grid-template-columns:repeat(4,1fr);
+gap:14px
+}
+.card{
+background:white;
+padding:12px;
+border-radius:12px;
+border:1px solid #eee
+}
+.photo{
+height:170px;
+background:#f1f4f3;
+border-radius:10px;
+display:flex;
+align-items:center;
+justify-content:center;
+font-size:75px;
+overflow:hidden
+}
+.photo img{
+width:100%;
+height:100%;
+object-fit:contain
+}
+.card h3{
+font-size:16px;
+margin:10px 0 5px
+}
+.price{
+font-size:19px;
+font-weight:bold;
+color:#087a3d
+}
+.old{
+color:#999;
+text-decoration:line-through;
+font-size:13px;
+margin-left:5px
+}
+.actions{
+display:flex;
+gap:7px;
+margin-top:10px
+}
+.actions button{
+flex:1;
+padding:9px;
+border-radius:7px
+}
+.add{
+background:#087a3d;
+color:white
+}
+.outline{
+background:white;
+border:1px solid #087a3d;
+color:#087a3d
+}
+
+footer{
+background:#123d73;
+color:white;
+padding:30px 16px;
+margin-top:40px
+}
+
+.modal{
+display:none;
+position:fixed;
+inset:0;
+background:#0008;
+z-index:100;
+align-items:center;
+justify-content:center;
+padding:15px
+}
+.modal.show{display:flex}
+.box{
+background:white;
+border-radius:14px;
+max-width:700px;
+width:100%;
+max-height:92vh;
+overflow:auto;
+padding:20px
+}
+.close{
+float:right;
+background:#eee;
+border-radius:50%;
+width:34px;
+height:34px
+}
+
+.form{
+display:grid;
+gap:10px
+}
+.form input,
+.form select,
+.form textarea{
+padding:11px;
+border:1px solid #ddd;
+border-radius:8px;
+width:100%
+}
+
+.admin{display:none}
+.admin.show{display:block}
+
+.adminnav{
+display:flex;
+gap:8px;
+overflow:auto;
+margin-bottom:15px
+}
+.adminnav button{
+padding:10px 13px;
+border-radius:8px;
+background:#eef2f1;
+white-space:nowrap
+}
+.adminnav button.active{
+background:#087a3d;
+color:white
+}
+
+.panel{
+background:white;
+padding:16px;
+border-radius:12px;
+margin-bottom:14px
+}
+
+.stats{
+display:grid;
+grid-template-columns:repeat(4,1fr);
+gap:10px
+}
+.stat{
+padding:15px;
+background:#eef7f2;
+border-radius:10px
+}
+
+.order{
+border:1px solid #ddd;
+border-radius:10px;
+padding:12px;
+margin:10px 0
+}
+
+.orderProduct{
+display:flex;
+gap:12px;
+align-items:center
+}
+.orderProduct img{
+width:70px;
+height:70px;
+object-fit:contain;
+background:#f5f5f5;
+border-radius:8px
+}
+
+.mini{
+width:55px;
+height:55px;
+background:#f5f5f5;
+border-radius:8px;
+display:flex;
+align-items:center;
+justify-content:center;
+overflow:hidden
+}
+.mini img{
+width:100%;
+height:100%;
+object-fit:contain
+}
+
+.table{
+width:100%;
+border-collapse:collapse
+}
+.table th,.table td{
+padding:9px;
+border-bottom:1px solid #eee;
+text-align:left
+}
+
+.label{
+border:2px solid #111;
+padding:18px;
+max-width:600px;
+background:white
+}
+.labelHead{
+display:flex;
+justify-content:space-between;
+border-bottom:2px solid #111;
+padding-bottom:10px
+}
+.labelBrand{
+font-size:28px;
+font-weight:bold;
+color:#123d73
+}
+
+.barcode{
+font-family:monospace;
+font-size:25px;
+letter-spacing:3px
+}
+
+.cartLine{
+display:flex;
+gap:10px;
+align-items:center;
+padding:10px 0;
+border-bottom:1px solid #eee
+}
+.cartLine img{
+width:65px;
+height:65px;
+object-fit:contain;
+background:#f4f4f4;
+border-radius:8px
+}
+
+@media(max-width:800px){
+.logo{width:120px;height:45px}
+.head{flex-wrap:wrap}
+.search{order:3;flex-basis:100%;max-width:none}
+.categories{grid-template-columns:repeat(3,1fr)}
+.products{grid-template-columns:repeat(2,1fr)}
+.hero h1{font-size:30px}
+.stats{grid-template-columns:repeat(2,1fr)}
+}
+
+@media(max-width:430px){
+.products{gap:8px}
+.card{padding:8px}
+.photo{height:130px}
+.hero{padding:20px}
+.hero h1{font-size:27px}
+}
+</style>
+</head>
+
+<body>
+
+<header>
+<div class="head">
+
+<img src="logo.png"
+class="logo"
+alt="SKR MART"
+onerror="this.style.display='none'">
+
+<div class="search">
+<input id="search"
+placeholder="Search products..."
+oninput="renderProducts()">
+<button onclick="renderProducts()">🔎</button>
+</div>
+
+<button class="share" onclick="shareSite()">
+📤 Share Site
+</button>
+
+<button class="cart" onclick="openCart()">
+🛒 <span id="cartCount" class="badge">0</span>
+</button>
+
+</div>
+
+<div class="nav">
+<div class="navin">
+<a href="#" onclick="home()">Home</a>
+<a href="#products">Products</a>
+<a href="#categories">Categories</a>
+<a href="#" onclick="openCheckout()">Checkout</a>
+<a href="#" onclick="openAdmin()">Admin Panel</a>
+</div>
+</div>
+</header>
+
+
+<main id="customer">
+
+<div class="container">
+
+<section class="hero">
+
+<div>
+<h1><span>SKR</span> MART</h1>
+<h2>ONLINE SHOPPING</h2>
+<p>हर घर की जरूरत, अब एक क्लिक पर</p>
+
+<button onclick="document.getElementById('products').scrollIntoView()">
+Shop Now
+</button>
+
+</div>
+
+<div style="font-size:90px">🛒</div>
+
+</section>
+
+
+<div class="title" id="categories">
+<h2>Top Categories</h2>
+</div>
+
+<div class="categories">
+
+<div class="category">🛒<b>Grocery</b></div>
+<div class="category">🍳<b>Kitchen</b></div>
+<div class="category">🧹<b>Home & Cleaning</b></div>
+<div class="category">🧴<b>Personal Care</b></div>
+<div class="category">📦<b>Household</b></div>
+<div class="category">➕<b>More</b></div>
+
+</div>
+
+
+<div class="title" id="products">
+
+<h2>Products</h2>
+
+<button class="outline" onclick="shareSite()">
+📤 Share SKR MART
+</button>
+
+</div>
+
+<div id="productGrid" class="products"></div>
+
+</div>
+
+</main>
+
+
+<!-- ADMIN PANEL -->
+
+<div id="admin" class="admin container">
+
+<div class="title">
+<h2>SKR MART Admin Panel</h2>
+<button onclick="closeAdmin()">Customer Site</button>
+</div>
+
+<div class="adminnav">
+
+<button class="active"
+onclick="adminTab('dashboard',this)">
+Dashboard
+</button>
+
+<button onclick="adminTab('productsAdmin',this)">
+Products
+</button>
+
+<button onclick="adminTab('ordersAdmin',this)">
+Orders
+</button>
+
+<button onclick="adminTab('areasAdmin',this)">
+Delivery Areas
+</button>
+
+<button onclick="adminTab('labelsAdmin',this)">
+Billing & Label
+</button>
+
+</div>
+
+
+<div id="dashboard" class="atab"></div>
+<div id="productsAdmin" class="atab" style="display:none"></div>
+<div id="ordersAdmin" class="atab" style="display:none"></div>
+<div id="areasAdmin" class="atab" style="display:none"></div>
+<div id="labelsAdmin" class="atab" style="display:none"></div>
+
+</div>
+
+
+<!-- MODAL -->
+
+<div id="modal" class="modal">
+
+<div class="box">
+
+<button class="close" onclick="closeModal()">×</button>
+
+<div id="modalBody"></div>
+
+</div>
+
+</div>
+
+
+<footer>
+
+<h2>SKR MART</h2>
+
+<p>हर घर की जरूरत, अब एक क्लिक पर</p>
+
+<button onclick="shareSite()"
+style="padding:9px;border-radius:7px">
+📤 Share SKR MART
+</button>
+
+</footer>
+
+
+<script>
+
+const KEY="SKR_MART_FINAL";
+
+const defaultProducts=[
+
+{
+id:1,
+name:"Kitchen Chopper",
+price:299,
+old:599,
+stock:50,
+emoji:"🥗",
+category:"Kitchen"
+},
+
+{
+id:2,
+name:"Detergent Powder 1kg",
+price:120,
+old:180,
+stock:30,
+emoji:"🧺",
+category:"Home & Cleaning"
+},
+
+{
+id:3,
+name:"Aashirvaad Atta 5kg",
+price:249,
+old:280,
+stock:40,
+emoji:"🌾",
+category:"Grocery"
+},
+
+{
+id:4,
+name:"Bath Soap",
+price:35,
+old:45,
+stock:80,
+emoji:"🧼",
+category:"Personal Care"
+},
+
+{
+id:5,
+name:"Storage Container",
+price:199,
+old:249,
+stock:25,
+emoji:"🥣",
+category:"Household"
+},
+
+{
+id:6,
+name:"Dish Wash Liquid",
+price:99,
+old:120,
+stock:35,
+emoji:"🧴",
+category:"Home & Cleaning"
+}
+
+];
+
+
+let db=JSON.parse(localStorage.getItem(KEY)||"null")||{
+
+products:defaultProducts,
+
+areas:[
+{name:"Gaur City",pin:"201301",active:true},
+{name:"Roja Jalalpur",pin:"201300",active:true}
+],
+
+orders:[],
+cart:[]
+
+};
+
+
+function save(){
+
+localStorage.setItem(KEY,JSON.stringify(db));
+
+updateCart();
+
+}
+
+
+function money(n){
+
+return "₹"+Number(n).toLocaleString("en-IN");
+
+}
+
+
+function productImage(p){
+
+if(p.image){
+
+return `<img src="${p.image}" alt="${p.name}">`;
+
+}
+
+return `<span>${p.emoji||"📦"}</span>`;
+
+}
+
+
+function renderProducts(){
+
+let q=(document.getElementById("search").value||"").toLowerCase();
+
+let list=db.products.filter(p=>
+
+(p.name+" "+p.category)
+.toLowerCase()
+.includes(q)
+
+);
+
+
+document.getElementById("productGrid").innerHTML=
+
+list.map(p=>`
+
+<div class="card">
+
+<div class="photo">
+
+${productImage(p)}
+
+</div>
+
+<h3>${p.name}</h3>
+
+<div>
+
+<span class="price">${money(p.price)}</span>
+
+<span class="old">${money(p.old)}</span>
+
+</div>
+
+<p style="font-size:12px;color:#087a3d">
+● Stock: ${p.stock}
+</p>
+
+<div class="actions">
+
+<button class="add"
+onclick="addCart(${p.id})">
+Add to Cart
+</button>
+
+<button class="outline"
+onclick="shareProduct(${p.id})">
+📤 Share
+</button>
+
+</div>
+
+</div>
+
+`).join("");
+
+}
+
+
+function addCart(id){
+
+let p=db.products.find(x=>x.id===id);
+
+if(!p)return;
+
+let x=db.cart.find(x=>x.id===id);
+
+if(x)x.qty++;
+
+else db.cart.push({id:id,qty:1});
+
+save();
+
+alert("Product cart में जोड़ दिया गया।");
+
+}
+
+
+function updateCart(){
+
+document.getElementById("cartCount").textContent=
+
+db.cart.reduce((a,x)=>a+x.qty,0);
+
+}
+
+
+async function shareProduct(id){
+
+let p=db.products.find(x=>x.id===id);
+
+let url=location.href.split("#")[0]+"#product-"+id;
+
+let data={
+
+title:p.name+" - SKR MART",
+
+text:p.name+" - "+money(p.price)+"\nSKR MART",
+
+url:url
+
+};
+
+
+if(navigator.share){
+
+try{
+
+await navigator.share(data);
+
+}catch(e){}
+
+}else{
+
+navigator.clipboard?.writeText(url);
+
+alert("Product link copy हो गया।");
+
+}
+
+}
+
+
+async function shareSite(){
+
+let data={
+
+title:"SKR MART - Online Shopping",
+
+text:"SKR MART — हर घर की जरूरत, अब एक क्लिक पर",
+
+url:location.href.split("#")[0]
+
+};
+
+
+if(navigator.share){
+
+try{
+
+await navigator.share(data);
+
+}catch(e){}
+
+}else{
+
+navigator.clipboard?.writeText(data.url);
+
+alert("Website link copy हो गया।");
+
+}
+
+}
+
+
+function openCart(){
+
+let html="<h2>🛒 My Cart</h2>";
+
+if(!db.cart.length){
+
+html+="<p>Cart खाली है।</p>";
+
+}else{
+
+db.cart.forEach(x=>{
+
+let p=db.products.find(p=>p.id===x.id);
+
+html+=`
+
+<div class="cartLine">
+
+<div class="mini">
+${productImage(p)}
+</div>
+
+<div style="flex:1">
+
+<b>${p.name}</b><br>
+
+${money(p.price)} × ${x.qty}
+
+</div>
+
+<button onclick="removeCart(${p.id})">
+🗑️
+</button>
+
+</div>
+
+`;
+
+});
+
+}
+
+let total=db.cart.reduce((s,x)=>{
+
+let p=db.products.find(p=>p.id===x.id);
+
+return s+p.price*x.qty;
+
+},0);
+
+
+html+=`
+
+<hr>
+
+<h3>Total: ${money(total)}</h3>
+
+<button class="primary"
+onclick="openCheckout()">
+Proceed to Checkout
+</button>
+
+`;
+
+
+document.getElementById("modalBody").innerHTML=html;
+
+document.getElementById("modal").classList.add("show");
+
+}
+
+
+function removeCart(id){
+
+db.cart=db.cart.filter(x=>x.id!==id);
+
+save();
+
+openCart();
+
+}
+
+
+function openCheckout(){
+
+if(!db.cart.length){
+
+alert("पहले product cart में जोड़िए।");
+
+return;
+
+}
+
+
+let areas=db.areas.filter(a=>a.active);
+
+
+document.getElementById("modalBody").innerHTML=`
+
+<h2>Checkout</h2>
+
+<div class="form">
+
+<input id="cname"
+placeholder="Customer Name *">
+
+<input id="phone"
+placeholder="Mobile Number *"
+maxlength="10">
+
+<textarea id="addr"
+rows="3"
+placeholder="Full Delivery Address *"></textarea>
+
+<select id="area">
+
+<option value="">
+Delivery Area चुनें *
+</option>
+
+${areas.map(a=>`
+
+<option value="${a.name}"
+data-pin="${a.pin}">
+
+${a.name} (${a.pin})
+
+</option>
+
+`).join("")}
+
+</select>
+
+<div>
+PIN:
+<b id="pinShow">—</b>
+</div>
+
+<button class="outline"
+onclick="getLocation()">
+
+📍 Use Current Location
+
+</button>
+
+<select id="payment">
+
+<option>Cash on Delivery</option>
+
+<option>UPI / Online</option>
+
+</select>
+
+<button class="primary"
+onclick="placeOrder()">
+
+Place Order
+
+</button>
+
+</div>
+
+`;
+
+
+document.getElementById("modal").classList.add("show");
+
+
+document.getElementById("area").onchange=function(){
+
+document.getElementById("pinShow").textContent=
+
+this.selectedOptions[0].dataset.pin||"—";
+
+};
+
+}
+
+
+function getLocation(){
+
+if(!navigator.geolocation){
+
+alert("Location उपलब्ध नहीं है.");
+
+return;
+
+}
+
+navigator.geolocation.getCurrentPosition(
+
+p=>{
+
+alert(
+
+"Current Location मिल गई.\n\nLatitude: "+
+
+p.coords.latitude.toFixed(5)+
+
+"\nLongitude: "+
+
+p.coords.longitude.toFixed(5)
+
+);
+
+},
+
+()=>{
+
+alert("Location permission allow कीजिए.");
+
+}
+
+);
+
+}
+
+
+function placeOrder(){
+
+let name=document.getElementById("cname").value.trim();
+
+let phone=document.getElementById("phone").value.trim();
+
+let address=document.getElementById("addr").value.trim();
+
+let select=document.getElementById("area");
+
+let area=select.value;
+
+let pin=select.selectedOptions[0]?.dataset.pin||"";
+
+let payment=document.getElementById("payment").value;
+
+
+if(!name||phone.length!==10||!address||!area){
+
+alert("Name, 10 digit mobile, address और allowed area भरना जरूरी है.");
+
+return;
+
+}
+
+
+let items=db.cart.map(x=>{
+
+let p=db.products.find(p=>p.id===x.id);
+
+return{
+
+id:p.id,
+
+name:p.name,
+
+price:p.price,
+
+qty:x.qty,
+
+emoji:p.emoji,
+
+image:p.image||""
+
+};
+
+});
+
+
+let total=items.reduce(
+
+(s,x)=>s+x.price*x.qty,0
+
+);
+
+
+let order={
+
+id:"SKR"+Date.now().toString().slice(-7),
+
+date:new Date().toLocaleString("en-IN"),
+
+customer:name,
+
+phone:phone,
+
+address:address,
+
+area:area,
+
+pin:pin,
+
+payment:payment,
+
+items:items,
+
+total:total,
+
+status:"New Order"
+
+};
+
+
+db.orders.unshift(order);
+
+db.cart=[];
+
+save();
+
+closeModal();
+
+alert("Order successfully received.\nOrder ID: "+order.id);
+
+}
+
+
+function openAdmin(){
+
+document.getElementById("customer").style.display="none";
+
+document.querySelector("footer").style.display="none";
+
+document.getElementById("admin").classList.add("show");
+
+renderAdmin();
+
+}
+
+
+function closeAdmin(){
+
+document.getElementById("admin").classList.remove("show");
+
+document.getElementById("customer").style.display="block";
+
+document.querySelector("footer").style.display="block";
+
+}
+
+
+function home(){
+
+closeAdmin();
+
+window.scrollTo(0,0);
+
+}
+
+
+function closeModal(){
+
+document.getElementById("modal").classList.remove("show");
+
+}
+
+
+function adminTab(tab,button){
+
+document.querySelectorAll(".adminnav button")
+.forEach(b=>b.classList.remove("active"));
+
+button.classList.add("active");
+
+
+["dashboard",
+"productsAdmin",
+"ordersAdmin",
+"areasAdmin",
+"labelsAdmin"]
+.forEach(x=>{
+
+document.getElementById(x).style.display="none";
+
+});
+
+
+document.getElementById(tab).style.display="block";
+
+renderAdmin();
+
+}
+
+
+function renderAdmin(){
+
+document.getElementById("dashboard").innerHTML=`
+
+<div class="stats">
+
+<div class="stat">
+<b>Total Products</b>
+<h2>${db.products.length}</h2>
+</div>
+
+<div class="stat">
+<b>Total Orders</b>
+<h2>${db.orders.length}</h2>
+</div>
+
+<div class="stat">
+<b>Pending Orders</b>
+<h2>${db.orders.filter(o=>o.status!=="Delivered").length}</h2>
+</div>
+
+<div class="stat">
+<b>Delivery Areas</b>
+<h2>${db.areas.filter(a=>a.active).length}</h2>
+</div>
+
+</div>
+
+<div class="panel">
+
+<h3>Recent Orders</h3>
+
+${db.orders.slice(0,5).map(orderMini).join("")||
+
+"अभी कोई order नहीं है।"}
+
+</div>
+
+`;
+
+
+document.getElementById("productsAdmin").innerHTML=`
+
+<div class="panel">
+
+<h3>Products</h3>
+
+<button class="primary"
+onclick="addProduct()">
+
++ Add Product
+
+</button>
+
+<br><br>
+
+<table class="table">
+
+<tr>
+<th>Image</th>
+<th>Product</th>
+<th>Price</th>
+<th>Stock</th>
+<th>Action</th>
+</tr>
+
+${db.products.map(p=>`
+
+<tr>
+
+<td>
+<div class="mini">
+${productImage(p)}
+</div>
+</td>
+
+<td>${p.name}</td>
+
+<td>${money(p.price)}</td>
+
+<td>${p.stock}</td>
+
+<td>
+
+<button onclick="editProduct(${p.id})">
+Edit
+</button>
+
+<button onclick="deleteProduct(${p.id})">
+Delete
+</button>
+
+</td>
+
+</tr>
+
+`).join("")}
+
+</table>
+
+</div>
+
+`;
+
+
+document.getElementById("ordersAdmin").innerHTML=`
+
+<div class="panel">
+
+<h3>Orders</h3>
+
+<select onchange="filterOrders(this.value)">
+
+<option>All</option>
+
+${[...new Set(db.orders.map(o=>o.area))]
+.map(a=>`<option>${a}</option>`)
+.join("")}
+
+</select>
+
+<div id="orderList">
+
+${db.orders.map(orderMini).join("")||
+
+"अभी कोई order नहीं है।"}
+
+</div>
+
+</div>
+
+`;
+
+
+document.getElementById("areasAdmin").innerHTML=`
+
+<div class="panel">
+
+<h3>Delivery Areas / PIN</h3>
+
+<button class="primary"
+onclick="addArea()">
+
++ Add Area
+
+</button>
+
+<p>
+जैसे-जैसे SKR MART का network बढ़े,
+आप यहाँ नए Area/PIN जोड़ सकते हैं।
+</p>
+
+${db.areas.map((a,i)=>`
+
+<div class="order">
+
+<b>${a.name}</b> — ${a.pin}
+
+<br>
+
+Status:
+${a.active?"✅ Allowed":"⛔ Blocked"}
+
+<br><br>
+
+<button onclick="toggleArea(${i})">
+
+${a.active?"Block":"Allow"}
+
+</button>
+
+<button onclick="deleteArea(${i})">
+Delete
+</button>
+
+</div>
+
+`).join("")}
+
+</div>
+
+`;
+
+
+document.getElementById("labelsAdmin").innerHTML=`
+
+<div class="panel">
+
+<h3>Billing & Parcel Label</h3>
+
+<p>
+Final outer parcel label में
+Product Name नहीं होगा।
+</p>
+
+<p>
+Delivery Address के नीचे
+Area और PIN automatically आएगा।
+</p>
+
+<p>
+Orders में जाकर
+<strong>Print Label</strong>
+दबाकर label print कर सकते हैं।
+</p>
+
+</div>
+
+`;
+
+}
+
+
+function orderMini(o){
+
+return `
+
+<div class="order">
+
+<b>#${o.id}</b>
+
+<br>
+
+Customer:
+${o.customer}
+
+<br>
+
+Area:
+${o.area} (${o.pin})
+
+<br>
+
+Products:
+${o.items.map(i=>
+i.name+" × "+i.qty
+).join(", ")}
+
+<br>
+
+Total:
+<b>${money(o.total)}</b>
+
+<br>
+
+Status:
+<b>${o.status}</b>
+
+<br><br>
+
+<button onclick="orderDetails('${o.id}')">
+View Order Details
+</button>
+
+<button onclick="printLabel('${o.id}')">
+Print Label
+</button>
+
+</div>
+
+`;
+
+}
+
+
+function orderDetails(id){
+
+let o=db.orders.find(x=>x.id===id);
+
+if(!o)return;
+
+
+document.getElementById("modalBody").innerHTML=`
+
+<h2>Order Details</h2>
+
+<div class="panel">
+
+<b>Order ID:</b> ${o.id}<br>
+
+<b>Customer:</b> ${o.customer}<br>
+
+<b>Mobile:</b> ${o.phone}<br>
+
+<b>Address:</b> ${o.address}<br>
+
+<b>Area:</b> ${o.area} (${o.pin})<br>
+
+<b>Payment:</b> ${o.payment}<br>
+
+<b>Status:</b> ${o.status}
+
+</div>
+
+<h3>Ordered Products</h3>
+
+${o.items.map(i=>`
+
+<div class="panel orderProduct">
+
+<div class="mini">
+
+${i.image?
+
+`<img src="${i.image}">`:
+
+`<span style="font-size:35px">
+${i.emoji||"📦"}
+</span>`
+
+}
+
+</div>
+
+<div>
+
+<b>${i.name}</b>
+
+<br>
+
+Quantity:
+${i.qty}
+
+<br>
+
+Price:
+${money(i.price)}
+
+<br>
+
+Total:
+${money(i.price*i.qty)}
+
+</div>
+
+</div>
+
+`).join("")}
+
+<h3>Total:
+${money(o.total)}
+</h3>
+
+
+<select onchange="setStatus('${o.id}',this.value)">
+
+<option>${o.status}</option>
+
+<option>New Order</option>
+<option>Confirmed</option>
+<option>Packing</option>
+<option>Packed</option>
+<option>Out for Delivery</option>
+<option>Delivered</option>
+
+</select>
+
+<br><br>
+
+<button class="primary"
+onclick="printLabel('${o.id}')">
+
+Print Label
+
+</button>
+
+`;
+
+
+document.getElementById("modal").classList.add("show");
+
+}
+
+
+function setStatus(id,status){
+
+let o=db.orders.find(x=>x.id===id);
+
+if(o){
+
+o.status=status;
+
+save();
+
+renderAdmin();
+
+alert("Status updated: "+status);
+
+}
+
+}
+
+
+function filterOrders(area){
+
+document.getElementById("orderList").innerHTML=
+
+db.orders
+
+.filter(o=>area==="All"||o.area===area)
+
+.map(orderMini)
+
+.join("")||
+
+"No orders";
+
+}
+
+
+function addArea(){
+
+document.getElementById("modalBody").innerHTML=`
+
+<h2>Add Delivery Area</h2>
+
+<div class="form">
+
+<input id="aname"
+placeholder="Area Name">
+
+<input id="apin"
+placeholder="6 digit PIN"
+maxlength="6">
+
+<button class="primary"
+onclick="saveArea()">
+
+Save Area
+
+</button>
+
+</div>
+
+`;
+
+document.getElementById("modal").classList.add("show");
+
+}
+
+
+function saveArea(){
+
+let name=document.getElementById("aname").value.trim();
+
+let pin=document.getElementById("apin").value.trim();
+
+
+if(!name||pin.length!==6){
+
+alert("Area और 6 digit PIN भरें.");
+
+return;
+
+}
+
+
+db.areas.push({
+
+name:name,
+pin:pin,
+active:true
+
+});
+
+
+save();
+
+closeModal();
+
+renderAdmin();
+
+}
+
+
+function toggleArea(i){
+
+db.areas[i].active=!db.areas[i].active;
+
+save();
+
+renderAdmin();
+
+}
+
+
+function deleteArea(i){
+
+if(confirm("Area delete करें?")){
+
+db.areas.splice(i,1);
+
+save();
+
+renderAdmin();
+
+}
+
+}
+
+
+function addProduct(){
+
+document.getElementById("modalBody").innerHTML=
+
+productForm();
+
+document.getElementById("modal").classList.add("show");
+
+}
+
+
+function editProduct(id){
+
+let p=db.products.find(x=>x.id===id);
+
+document.getElementById("modalBody").innerHTML=
+
+productForm(p);
+
+document.getElementById("modal").classList.add("show");
+
+}
+
+
+function productForm(p={}){
+
+return `
+
+<h2>${p.id?"Edit":"Add"} Product</h2>
+
+<div class="form">
+
+<input id="pn"
+value="${p.name||""}"
+placeholder="Product Name">
+
+<input id="pp"
+type="number"
+value="${p.price||""}"
+placeholder="Price">
+
+<input id="po"
+type="number"
+value="${p.old||""}"
+placeholder="Old Price">
+
+<input id="ps"
+type="number"
+value="${p.stock||""}"
+placeholder="Stock">
+
+<input id="pe"
+value="${p.emoji||"📦"}"
+placeholder="Emoji">
+
+<input id="pi"
+value="${p.image||""}"
+placeholder="Product Image URL">
+
+<button class="primary"
+onclick="saveProduct(${p.id||0})">
+
+Save Product
+
+</button>
+
+</div>
+
+`;
+
+}
+
+
+function saveProduct(id){
+
+let p={
+
+id:id||Date.now(),
+
+name:document.getElementById("pn").value.trim(),
+
+price:Number(document.getElementById("pp").value),
+
+old:Number(document.getElementById("po").value)||0,
+
+stock:Number(document.getElementById("ps").value)||0,
+
+emoji:document.getElementById("pe").value||"📦",
+
+image:document.getElementById("pi").value.trim()
+
+};
+
+
+if(!p.name||!p.price){
+
+alert("Product name और price जरूरी है.");
+
+return;
+
+}
+
+
+if(id){
+
+let index=db.products.findIndex(x=>x.id===id);
+
+db.products[index]=p;
+
+}else{
+
+db.products.push(p);
+
+}
+
+
+save();
+
+closeModal();
+
+renderProducts();
+
+renderAdmin();
+
+}
+
+
+function deleteProduct(id){
+
+if(confirm("Product delete करें?")){
+
+db.products=db.products.filter(p=>p.id!==id);
+
+save();
+
+renderProducts();
+
+renderAdmin();
+
+}
+
+}
+
+
+function printLabel(id){
+
+let o=db.orders.find(x=>x.id===id);
+
+if(!o)return;
+
+
+let w=window.open("","_blank");
+
+
+w.document.write(`
+
+<html>
+
+<head>
+
+<title>SKR MART Label</title>
+
+<style>
+
+body{
+font-family:Arial;
+padding:20px
+}
+
+.label{
+border:2px solid #111;
+padding:18px;
+max-width:600px
+}
+
+.head{
+display:flex;
+justify-content:space-between;
+border-bottom:2px solid #111;
+padding-bottom:10px
+}
+
+.brand{
+font-size:28px;
+font-weight:bold;
+color:#123d73
+}
+
+.address{
+font-size:18px;
+line-height:1.5;
+margin-top:15px
+}
+
+.barcode{
+font-family:monospace;
+font-size:25px;
+letter-spacing:3px;
+margin-top:15px
+}
+
+@media print{
+button{display:none}
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="label">
+
+<div class="head">
+
+<div class="brand">
+SKR MART
+</div>
+
+<div>
+${o.payment}
+</div>
+
+</div>
+
+<h3>
+Delivery Address
+</h3>
+
+<div class="address">
+
+<b>${o.customer}</b>
+
+<br>
+
+${o.address}
+
+<br>
+
+(${o.area}, ${o.pin})
+
+<br>
+
+📞 ${o.phone}
+
+</div>
+
+<hr>
+
+<b>
+Order ID: ${o.id}
+</b>
+
+<div class="barcode">
+|||| ${o.id} ||||
+</div>
+
+<p>
+Thank you for shopping with SKR MART
+</p>
+
+</div>
+
+<br>
+
+<button onclick="print()">
+Print
+</button>
+
+</body>
+
+</html>
+
+`);
+
+w.document.close();
+
+}
+
+
+renderProducts();
+
+updateCart();
+
+renderAdmin();
+
+</script>
+
+</body>
+</html>
