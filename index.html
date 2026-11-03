@@ -2119,6 +2119,441 @@ updateCart();
 renderAdmin();
 
 </script>
+/* =========================================
+   SKR MART PRODUCT DETAILS SYSTEM
+========================================= */
 
+function getProductImages(p){
+  if(p.images && p.images.length){
+    return p.images;
+  }
+
+  if(p.image){
+    return [p.image];
+  }
+
+  return [];
+}
+
+
+function openProductDetails(id){
+
+  const product = db.products.find(p => p.id == id);
+
+  if(!product){
+    alert("Product नहीं मिला।");
+    return;
+  }
+
+  const images = getProductImages(product);
+
+  let mainImage = "";
+
+  if(images.length){
+    mainImage = `
+      <img
+        id="detailsMainImage"
+        class="productMainPhoto"
+        src="${images[0]}"
+        alt="${product.name}"
+      >
+    `;
+  }else{
+    mainImage = `
+      <div
+        class="productMainPhoto"
+        style="
+          display:flex;
+          align-items:center;
+          justify-content:center;
+          font-size:90px;
+        "
+      >
+        ${product.emoji || "📦"}
+      </div>
+    `;
+  }
+
+
+  let thumbnails = "";
+
+  if(images.length){
+
+    thumbnails = `
+      <div class="productThumbs">
+
+        ${images.map((img,index)=>`
+
+          <img
+            src="${img}"
+            onclick="changeProductImage('${img}')"
+            alt="Photo ${index+1}"
+          >
+
+        `).join("")}
+
+      </div>
+    `;
+  }
+
+
+  let discount = "";
+
+  if(product.old && product.old > product.price){
+
+    const percent = Math.round(
+      ((product.old - product.price) / product.old) * 100
+    );
+
+    discount = `
+      <span class="productDiscount">
+        ${percent}% OFF
+      </span>
+    `;
+  }
+
+
+  const description =
+    product.description ||
+    "इस product की जानकारी जल्द ही उपलब्ध होगी।";
+
+
+  const weight =
+    product.weight ||
+    "जानकारी उपलब्ध नहीं";
+
+
+  const stock =
+    Number(product.stock || 0);
+
+
+  document.getElementById("productDetailsContent").innerHTML = `
+
+    <div class="productDetails">
+
+      <div>
+
+        ${mainImage}
+
+        ${thumbnails}
+
+      </div>
+
+
+      <div class="productInfo">
+
+        <h1>
+          ${escapeHTML(product.name)}
+        </h1>
+
+
+        <div>
+
+          <span class="productPrice">
+            ₹${Number(product.price || 0)}
+          </span>
+
+          ${
+            product.old
+            ?
+            `<span class="productOldPrice">
+              ₹${Number(product.old)}
+            </span>`
+            :
+            ""
+          }
+
+          ${discount}
+
+        </div>
+
+
+        <div class="productMeta">
+
+          <div>
+            <b>Weight / Size:</b>
+            ${escapeHTML(weight)}
+          </div>
+
+          <div style="margin-top:6px;">
+            <b>Stock:</b>
+
+            ${
+              stock > 0
+              ?
+              `<span style="color:green;">
+                Available (${stock})
+              </span>`
+              :
+              `<span style="color:red;">
+                Out of Stock
+              </span>`
+            }
+
+          </div>
+
+          ${
+            product.sku
+            ?
+            `
+            <div style="margin-top:6px;">
+              <b>Product Code:</b>
+              ${escapeHTML(product.sku)}
+            </div>
+            `
+            :
+            ""
+          }
+
+        </div>
+
+
+        <div class="productDescription">
+
+          <h3>Product Description</h3>
+
+          <p>
+            ${escapeHTML(description)}
+          </p>
+
+        </div>
+
+
+        <div class="productButtons">
+
+          ${
+            stock > 0
+            ?
+            `
+            <button
+              class="btnCart"
+              onclick="addProductToCart(${product.id})"
+            >
+              🛒 Add to Cart
+            </button>
+
+            <button
+              class="btnBuy"
+              onclick="buyProductNow(${product.id})"
+            >
+              ⚡ Buy Now
+            </button>
+            `
+            :
+            `
+            <button
+              disabled
+              style="
+                background:#aaa;
+                color:white;
+                padding:12px 20px;
+                border:0;
+                border-radius:8px;
+              "
+            >
+              Out of Stock
+            </button>
+            `
+          }
+
+
+          <button
+            class="btnShare"
+            onclick="shareThisProduct(${product.id})"
+          >
+            📤 Share Product
+          </button>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  `;
+
+
+  document.getElementById("products").style.display = "none";
+
+  document.getElementById("productDetailsPage").style.display = "block";
+
+  window.scrollTo({
+    top:0,
+    behavior:"smooth"
+  });
+
+}
+
+
+/* Main photo बदलना */
+
+function changeProductImage(src){
+
+  const main =
+    document.getElementById("detailsMainImage");
+
+  if(main){
+    main.src = src;
+  }
+
+}
+
+
+/* Add to Cart */
+
+function addProductToCart(id){
+
+  const product =
+    db.products.find(p => p.id == id);
+
+  if(!product){
+    alert("Product नहीं मिला।");
+    return;
+  }
+
+
+  if(Number(product.stock || 0) <= 0){
+
+    alert("यह product अभी stock में नहीं है।");
+    return;
+
+  }
+
+
+  const existing =
+    db.cart.find(item => item.id == id);
+
+
+  if(existing){
+
+    existing.qty =
+      Number(existing.qty || 1) + 1;
+
+  }else{
+
+    db.cart.push({
+      id: product.id,
+      qty: 1
+    });
+
+  }
+
+
+  save();
+
+  alert(
+    product.name +
+    " Cart में add हो गया।"
+  );
+
+}
+
+
+/* Buy Now */
+
+function buyProductNow(id){
+
+  addProductToCart(id);
+
+  setTimeout(()=>{
+
+    if(typeof showPage === "function"){
+
+      showPage("checkout");
+
+    }else{
+
+      const checkout =
+        document.getElementById("checkout");
+
+      if(checkout){
+
+        document.getElementById(
+          "productDetailsPage"
+        ).style.display = "none";
+
+        checkout.style.display = "block";
+
+        window.scrollTo({
+          top:0,
+          behavior:"smooth"
+        });
+
+      }
+
+    }
+
+  },300);
+
+}
+
+
+/* Share Product */
+
+async function shareThisProduct(id){
+
+  const product =
+    db.products.find(p => p.id == id);
+
+  if(!product) return;
+
+
+  const productUrl =
+    window.location.href.split("#")[0]
+    + "#product="
+    + product.id;
+
+
+  const shareData = {
+
+    title: product.name,
+
+    text:
+      `SKR MART पर ${product.name} देखें - ₹${product.price}`,
+
+    url: productUrl
+
+  };
+
+
+  try{
+
+    if(navigator.share){
+
+      await navigator.share(shareData);
+
+    }else{
+
+      await navigator.clipboard.writeText(
+        productUrl
+      );
+
+      alert(
+        "Product link copy हो गया।"
+      );
+
+    }
+
+  }catch(error){
+
+    console.log("Share cancelled");
+
+  }
+
+}
+
+
+/* HTML सुरक्षित रखने के लिए */
+
+function escapeHTML(value){
+
+  return String(value || "")
+    .replace(/&/g,"&amp;")
+    .replace(/</g,"&lt;")
+    .replace(/>/g,"&gt;")
+    .replace(/"/g,"&quot;")
+    .replace(/'/g,"&#039;");
+
+}
 </body>
 </html>
